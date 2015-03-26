@@ -1,0 +1,12 @@
+{
+    "name": "screeninvader.js",
+    "version": "1.0.0",
+    "description": "A JavaScript API for Janosh and ScreenInvader",
+    "author": "phaer",
+    "license": "AGPL",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/screeninvader/screeninvader.js.git"
+    }
+}
