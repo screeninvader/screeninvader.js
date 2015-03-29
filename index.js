@@ -4,6 +4,15 @@ var API = function(uri) {
     this.socket.onmessage = this.onMessage.bind(this);
     this.socket.onerror = this.onError.bind(this);
     this.socket.onopen = this.onOpen.bind(this);
+
+    this.player = this.addCommandSet(
+        'player',
+        ['Pause', 'Stop', 'Next', 'Previous', 'Forward', 'Rewind', 'ForwardMore',
+         'RewindMore', 'Jump']);
+    this.browser = this.addCommandSet(
+        'browser',
+        ['PageUp', 'PageDown', 'ScrollUp', 'ScrollDown', 'ZoomIn', 'ZoomOut']);
+
 };
 
 API.prototype = {
@@ -25,7 +34,7 @@ API.prototype = {
         this.socket.send('setup');
     },
 
-    command: function() {
+    send: function(command, key, value) {
         this.socket.send(
             JSON.stringify(
                 Array.prototype.slice.call(
@@ -33,38 +42,24 @@ API.prototype = {
     },
     set: function (key, value) {
         console.debug('setting', key, 'to', value);
-        this.command('trigger', key, value);
+        this.send('trigger', key, value);
     },
-    jump: function (index) {
-        this.set('/playlist/index', index);
+    command: function(command, param) {
+        param = typeof(param) === 'undefined' ? '' : param.toString();
+        console.debug('executing '+command+'('+param+')');
+        this.send('publish', command, 'W', param);
     },
-    previous: function () {
-        if (parseInt(this.state.playlist.index) - 1 >= 0) {
-            this.jump(parseInt(this.state.playlist.index) - 1);
-        }
-    },
-    next: function () {
-        if (parseInt(this.state.playlist.index) + 1 <= this.state.playlist.items.length) {
-            this.jump(parseInt(this.state.playlist.index) + 1);
-        }
-    },
-    play: function () {
-        this.set('/player/active', 'true');
-    },
-    pause: function () {
-        this.set('/player/active', 'false');
-    },
-    'volume-increase': function () {
-        if (this.state.sound.volume <= 90) {
-            this.set('/sound/volume', parseInt(this.state.sound.volume) + 10);
-        }
-    },
-    'volume-decrease': function () {
-        if (this.state.sound.volume >= 10) {
-            this.set('/sound/volume', parseInt(this.state.sound.volume) - 10);
-        }
-    },
+    showUrl: function(url) { this.command("showUrl", url); },
+    setVolume: function(volume) { this.set('/sound/volume', volume); },
 
+    addCommandSet: function(name, methods) {
+        var set = {}, self = this;
+        methods.forEach(function(method, index) {
+            set[method.toLowerCase()] = function(param) {
+                self.command(name + method, param); };
+        });
+        return set;
+    }
 };
 
 module.exports = API;
