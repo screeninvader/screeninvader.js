@@ -4,6 +4,8 @@ var Player = function(api) {
 
 Player.prototype = {
     pause: function() { this.api.command('playerPause'); },
+    // pause a second time un-pauses/plays.
+    play: function() { this.api.command('playerPause'); },
     stop: function() { this.api.command('playerStop'); },
     next: function() { this.api.command('playerNext'); },
     previous: function() { this.api.command('playerPrevious'); },
