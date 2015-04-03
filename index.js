@@ -1,6 +1,5 @@
 var Player = function(api) {
     this.api = api;
-    //['Pause', 'Stop', 'Next', 'Previous', 'Forward', 'Rewind', 'Jump']
 };
 
 Player.prototype = {
@@ -25,24 +24,24 @@ var API = function(uri) {
 };
 
 API.prototype = {
-    onReady: function(fn) {
-        this.callback = fn;
+    onReceive: function(fn) {
+        this.onReceiveCallback = fn;
     },
     onMessage: function(ev) {
         var update = JSON.parse(ev.data);
         if (!Array.isArray(update)) {
             // initial full sync.
             this.state = update;
-            this.callback(this.state);
-            return;
+        } else {
+            // update has the format key, operation, value here.
+            var path = update[0].split('/');
+            path.shift();
+            console.debug('changing ' + update[0] + ' from ' +
+                          this.getByPath(this.state, path.slice(0)) +
+                          ' to ' + update[2]);
+            this.setByPath(this.state, path.slice(0), update[2]);
         }
-        // update has the format key, operation, value here.
-        var path = update[0].split('/');
-        path.shift();
-        console.debug('changing ' + update[0] + ' from ' +
-                      this.getByPath(this.state, path.slice(0)) +
-                      ' to ' + update[2]);
-        this.setByPath(this.state, path.slice(0), update[2]);
+        this.onReceiveCallback(this.state);
     },
     setByPath: function (obj, path, value) {
         if (path.length > 1) {
