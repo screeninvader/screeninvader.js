@@ -16,12 +16,30 @@ Player.prototype = {
     },
 };
 
+var Browser = function(api) {
+    this.api = api;
+}
+
+Browser.prototype = {
+    showUrl:     function() { this.api.command('/browser/url'); },
+    pageUp:      function() { this.api.command('browserPageUp'); },
+    pageDown:    function() { this.api.command('browserPageDown'); },
+    scrollUp:    function() { this.api.command('browserScrollUp'); },
+    scrollDown:  function() { this.api.command('browserScrollDown'); },
+    scrollLeft:  function() { this.api.command('browserScrollLeft'); },
+    scrollRight: function() { this.api.command('browserScrollRight'); },
+    zoomIn:      function() { this.api.command('browserZoomIn'); },
+    zoomOut:     function() { this.api.command('browserZoomOut'); },
+    close:       function() { this.api.command('browserClose'); },
+};
+
 var API = function(uri) {
     this.socket = new WebSocket(uri);
     this.socket.onmessage = this.onMessage.bind(this);
     this.socket.onerror = this.onError.bind(this);
     this.socket.onopen = this.onOpen.bind(this);
     this.player = new Player(this);
+    this.browser = new Browser(this);
 }
 
 API.prototype = {
