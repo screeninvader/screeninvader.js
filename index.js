@@ -33,6 +33,23 @@ Browser.prototype = {
     close:       function() { this.api.command('browserClose'); },
 };
 
+var Pdf = function(api) {
+    this.api = api;
+}
+
+Pdf.prototype = {
+    showUrl:     function() { this.api.command('/pdf/url'); },
+    active:      function() { this.api.command('/pdf/active'); },
+    pageUp:      function() { this.api.command('pdfPageUp'); },
+    pageDown:    function() { this.api.command('pdfPageDown'); },
+    scrollUp:    function() { this.api.command('pdfScrollUp'); },
+    scrollDown:  function() { this.api.command('pdfScrollDown'); },
+    scrollLeft:  function() { this.api.command('pdfScrollLeft'); },
+    scrollRight: function() { this.api.command('pdfScrollRight'); },
+    zoomIn:      function() { this.api.command('pdfZoomIn'); },
+    zoomOut:     function() { this.api.command('pdfZoomOut'); },
+};
+
 var API = function(uri) {
     this.socket = new WebSocket(uri);
     this.socket.onmessage = this.onMessage.bind(this);
@@ -40,6 +57,7 @@ var API = function(uri) {
     this.socket.onopen = this.onOpen.bind(this);
     this.player = new Player(this);
     this.browser = new Browser(this);
+    this.pdf = new Pdf(this);
 }
 
 API.prototype = {
