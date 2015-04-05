@@ -61,13 +61,16 @@ Notify.prototype = {
 
 var API = function(uri) {
   this.socket = new WebSocket(uri);
+
   this.socket.onmessage = this.onMessage.bind(this);
   this.socket.onerror = this.onError.bind(this);
   this.socket.onopen = this.onOpen.bind(this);
+
   this.player = new Player(this);
   this.browser = new Browser(this);
   this.pdf = new Pdf(this);
   this.notify = new Notify(this);
+  this.messageReceived = false;
 }
 
 API.prototype = {
@@ -84,12 +87,20 @@ API.prototype = {
       this.state = update;
     } else {
       // update has the format key, operation, value here.
-      var path = update[0].split('/');
+      var path = update[0].split('/'),
+          value = update[2]
+      ;
       path.shift();
+      if ( update[0] === 'notifySend' && value.indexOf('New client') > -1 ) {
+        //we return here because this message is received
+        //before the state has been set
+        this.messageReceived = true;
+        return console.log(value);
+      }
       console.debug('changing ' + update[0] + ' from ' +
               this.getByPath(this.state, path.slice(0)) +
-              ' to ' + update[2]);
-      this.setByPath(this.state, path.slice(0), update[2]);
+              ' to ' + value);
+      this.setByPath(this.state, path.slice(0), value);
     }
     this.onReceiveCallback(this.state);
   },
