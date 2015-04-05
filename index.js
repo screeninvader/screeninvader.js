@@ -50,6 +50,15 @@ Pdf.prototype = {
     zoomOut:     function() { this.api.command('pdfZoomOut'); },
 };
 
+var Notify = function(api) {
+    this.api = api;
+}
+
+Notify.prototype = {
+    info:        function(text) { this.api.command('notifySend', text); },
+    exception:   function(text) { this.api.command('notifyException', text); },
+};
+
 var API = function(uri) {
     this.socket = new WebSocket(uri);
     this.socket.onmessage = this.onMessage.bind(this);
@@ -58,6 +67,7 @@ var API = function(uri) {
     this.player = new Player(this);
     this.browser = new Browser(this);
     this.pdf = new Pdf(this);
+    this.notify = new Notify(this);
 }
 
 API.prototype = {
