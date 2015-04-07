@@ -19,10 +19,9 @@ Player.prototype = {
 var API = function(uri) {
     this.socket = new WebSocket(uri);
     this.socket.onmessage = this.onMessage.bind(this);
-    this.socket.onerror = this.onError.bind(this);
     this.socket.onopen = this.onOpen.bind(this);
+    this.onError = this.onError.bind(this);
     this.player = new Player(this);
-    //browser = ['PageUp', 'PageDown', 'ScrollUp', 'ScrollDown', 'ZoomIn', 'ZoomOut']);
 };
 
 API.prototype = {
@@ -40,6 +39,7 @@ API.prototype = {
             // update has the format key, operation, value here.
             var path = update[0].split('/');
             path.shift();
+            console.log(path);
             console.debug('changing ' + update[0] + ' from ' +
                           this.getByPath(this.state, path.slice(0)) +
                           ' to ' + update[2]);
@@ -61,8 +61,8 @@ API.prototype = {
             return obj;
         }
     },
-    onError: function(ev) {
-        console.error(ev);
+    onError: function(fn) {
+        this.socket.onerror = fn;
     },
     onOpen: function(ev) {
         this.socket.send('setup');
