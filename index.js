@@ -35,6 +35,8 @@ API.prototype = {
             // initial full sync.
             this.state = update;
         } else {
+            if (!this.state) { return; }
+
             // update has the format key, operation, value here.
             var path = update[0].split('/');
             path.shift();
