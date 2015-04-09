@@ -71,71 +71,71 @@ var API = function(uri) {
 };
 
 API.prototype = {
-    onReceive: function(fn) {
-        this.onReceiveCallback = fn;
-    },
-    onMessage: function(ev) {
-        var update = JSON.parse(ev.data);
-        if (!Array.isArray(update)) {
-            // initial full sync.
-            this.state = update;
-            this.state.events = {};
-        } else {
-            if (!this.state) { return; }
+  onReceive: function(fn) {
+    this.onReceiveCallback = fn;
+  },
+  onMessage: function(ev) {
+    var update = JSON.parse(ev.data);
+    if (!Array.isArray(update)) {
+      // initial full sync.
+      this.state = update;
+      this.state.events = {};
+    } else {
+      if (!this.state) { return; }
 
-            if (update[0].startsWith('/')) {
-                // update has the format key, operation, value here.
-                var path = update[0].split('/');
-                path.shift();
-                console.log(path);
-                console.debug('changing ' + update[0] + ' from ' +
-                              this.getByPath(this.state, path.slice(0)) +
-                              ' to ' + update[2]);
-                this.setByPath(this.state, path.slice(0), update[2]);
-            } else {
-                // update has the following format: event, operation, value
-                this.state.events[update[0]] = update[2];
-            }
-        }
-        this.onReceiveCallback(this.state);
-    },
-    setByPath: function (obj, path, value) {
-        if (path.length > 1) {
-            return this.setByPath(obj[path.shift()], path, value);
-        } else {
-            obj[path.shift()] = value;
-        }
-    },
-    getByPath: function(obj, path) {
-        if (path.length > 0) {
-            return this.getByPath(obj[path.shift()], path);
-        } else {
-            return obj;
-        }
-    },
-    onError: function(fn) {
-        this.socket.onerror = fn;
-    },
-    onOpen: function(ev) {
-        this.socket.send('setup');
-    },
-    send: function(command, key, value) {
-        this.socket.send(
-            JSON.stringify(
-                Array.prototype.slice.call(
-                    arguments)));
-    },
-    set: function (key, value) {
-        console.debug('setting', key, 'to', value);
-        this.send('trigger', key, value);
-    },
-    command: function(command, param) {
-        param = typeof(param) === 'undefined' ? '' : param.toString();
-        console.debug('executing '+command+'('+param+')');
-        this.send('publish', command, 'W', param);
-    },
-    showUrl: function(url) { this.command('showUrl', url); },
-    setVolume: function(volume) { this.set('/sound/volume', volume); },
+      if (update[0].startsWith('/')) {
+        // update has the format key, operation, value here.
+        var path = update[0].split('/');
+        path.shift();
+        console.log(path);
+        console.debug('changing ' + update[0] + ' from ' +
+                      this.getByPath(this.state, path.slice(0)) +
+                      ' to ' + update[2]);
+        this.setByPath(this.state, path.slice(0), update[2]);
+      } else {
+        // update has the following format: event, operation, value
+        this.state.events[update[0]] = update[2];
+      }
+    }
+    this.onReceiveCallback(this.state);
+  },
+  setByPath: function (obj, path, value) {
+    if (path.length > 1) {
+      return this.setByPath(obj[path.shift()], path, value);
+    } else {
+      obj[path.shift()] = value;
+    }
+  },
+  getByPath: function(obj, path) {
+    if (path.length > 0) {
+      return this.getByPath(obj[path.shift()], path);
+    } else {
+      return obj;
+    }
+  },
+  onError: function(fn) {
+    this.socket.onerror = fn;
+  },
+  onOpen: function(ev) {
+    this.socket.send('setup');
+  },
+  send: function(command, key, value) {
+    this.socket.send(
+      JSON.stringify(
+        Array.prototype.slice.call(
+          arguments)));
+  },
+  set: function (key, value) {
+    console.debug('setting', key, 'to', value);
+    this.send('trigger', key, value);
+  },
+  command: function(command, param) {
+    param = typeof(param) === 'undefined' ? '' : param.toString();
+    console.debug('executing '+command+'('+param+')');
+    this.send('publish', command, 'W', param);
+  },
+  showUrl: function(url) { this.command('showUrl', url); },
+  setVolume: function(volume) { this.set('/sound/volume', volume); },
 };
 
 module.exports = API;
