@@ -79,17 +79,23 @@ API.prototype = {
         if (!Array.isArray(update)) {
             // initial full sync.
             this.state = update;
+            this.state.events = {};
         } else {
             if (!this.state) { return; }
 
-            // update has the format key, operation, value here.
-            var path = update[0].split('/');
-            path.shift();
-            console.log(path);
-            console.debug('changing ' + update[0] + ' from ' +
-                          this.getByPath(this.state, path.slice(0)) +
-                          ' to ' + update[2]);
-            this.setByPath(this.state, path.slice(0), update[2]);
+            if (update[0].startsWith('/')) {
+                // update has the format key, operation, value here.
+                var path = update[0].split('/');
+                path.shift();
+                console.log(path);
+                console.debug('changing ' + update[0] + ' from ' +
+                              this.getByPath(this.state, path.slice(0)) +
+                              ' to ' + update[2]);
+                this.setByPath(this.state, path.slice(0), update[2]);
+            } else {
+                // update has the following format: event, operation, value
+                this.state.events[update[0]] = update[2];
+            }
         }
         this.onReceiveCallback(this.state);
     },
@@ -128,7 +134,7 @@ API.prototype = {
         console.debug('executing '+command+'('+param+')');
         this.send('publish', command, 'W', param);
     },
-    showUrl: function(url) { this.command("showUrl", url); },
+    showUrl: function(url) { this.command('showUrl', url); },
     setVolume: function(volume) { this.set('/sound/volume', volume); },
 };
 
