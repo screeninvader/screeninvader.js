@@ -1,6 +1,6 @@
 var Player = function(api) {
   this.api = api;
-}
+};
 
 Player.prototype = {
   pause:    function() { this.api.command('playerPause'); },
@@ -18,7 +18,7 @@ Player.prototype = {
 
 var Browser = function(api) {
   this.api = api;
-}
+};
 
 Browser.prototype = {
   showUrl:     function() { this.api.command('/browser/url'); },
@@ -35,7 +35,7 @@ Browser.prototype = {
 
 var Pdf = function(api) {
   this.api = api;
-}
+};
 
 Pdf.prototype = {
   showUrl:     function() { this.api.command('/pdf/url'); },
@@ -52,7 +52,7 @@ Pdf.prototype = {
 
 var Notify = function(api) {
   this.api = api;
-}
+};
 
 Notify.prototype = {
   info:        function(text) { this.api.command('notifySend', text); },
@@ -68,7 +68,7 @@ var API = function(uri) {
   this.browser = new Browser(this);
   this.pdf = new Pdf(this);
   this.notify = new Notify(this);
-}
+};
 
 API.prototype = {
     onReceive: function(fn) {
