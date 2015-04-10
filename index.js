@@ -100,20 +100,51 @@ API.prototype = {
         this.onReceiveCallback(this.state);
     },
     setByPath: function (obj, path, value) {
-        if (path.length > 1) {
-            return this.setByPath(obj[path.shift()], path, value);
+    if (path.length > 1) {
+      key = path.shift()
+      if(key.charAt(0) == '#') {
+        key = parseInt(key.substring(1));
+      } else if(key == ".") {
+        return null;
+      }
+
+      if(obj[key] === undefined) {
+        if(path.length >= 1 && path[0] == ".") {
+          if(value.charAt(0) == 'A') {
+            obj[key] = []
+            return null;
+          } else {
+            obj[key] = {}
+            return null;
+          }
         } else {
-            obj[path.shift()] = value;
+          obj[key] = "";
         }
-    },
-    getByPath: function(obj, path) {
-        if (path.length > 0) {
-            return this.getByPath(obj[path.shift()], path);
-        } else {
-            return obj;
-        }
-    },
-    onError: function(fn) {
+      }
+      console.debug(obj)
+      return this.setByPath(obj[key], path, value);
+    } else {
+      key = path.shift()
+      if(key == ".") {
+         return null;
+      }
+      obj[key] = value;
+    }
+  },
+  getByPath: function(obj, path) {
+    if (path.length > 0) {
+      key = path.shift()
+      if(key == ".") {
+       return null;
+      } else if (obj === undefined) {
+        return null;
+      }
+      return this.getByPath(obj[key], path);
+    } else {
+      return obj;
+    }
+  },
+  onError: function(fn) {
         this.socket.onerror = fn;
     },
     onOpen: function(ev) {
