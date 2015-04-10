@@ -1,3 +1,4 @@
+
 var Player = function(api) {
   this.api = api;
 };
@@ -88,10 +89,14 @@ API.prototype = {
                 var path = update[0].split('/');
                 path.shift();
                 console.log(path);
-                console.debug('changing ' + update[0] + ' from ' +
-                              this.getByPath(this.state, path.slice(0)) +
-                              ' to ' + update[2]);
-                this.setByPath(this.state, path.slice(0), update[2]);
+                if(update[1] == "W") {
+                  console.debug('changing ' + update[0] + ' from ' +
+                                this.getByPath(this.state, path.slice(0)) +
+                                ' to ' + update[2]);
+                  this.setByPath(this.state, path.slice(0), update[2]);
+                } else if(update[1] == "D") { 
+                  this.deleteByPath(this.state, path.slice(0));
+                }
             } else {
                 // update has the following format: event, operation, value
                 this.state.events[update[0]] = update[2];
@@ -103,17 +108,21 @@ API.prototype = {
     if (path.length > 1) {
       key = path.shift()
       if(key.charAt(0) == '#') {
+        //encountered an array element
         key = parseInt(key.substring(1));
       } else if(key == ".") {
+        //encountered a directory element -> ignore
         return null;
       }
 
       if(obj[key] === undefined) {
         if(path.length >= 1 && path[0] == ".") {
           if(value.charAt(0) == 'A') {
+            //create an array 
             obj[key] = []
             return null;
           } else {
+            //create an object
             obj[key] = {}
             return null;
           }
@@ -129,6 +138,25 @@ API.prototype = {
          return null;
       }
       obj[key] = value;
+    }
+  },
+  deleteByPath: function (obj, path) {
+    if (path.length > 1) {
+      key = path.shift()
+      if(key.charAt(0) == '#') {
+        key = parseInt(key.substring(1));
+      } else if(path[0] == ".") {
+        delete obj[key];
+        return null;
+      }
+
+      return this.deleteByPath(obj[key], path);
+    } else {
+      key = path.shift()
+      if(key == ".") {
+         return null;
+      }
+      delete obj[key];
     }
   },
   getByPath: function(obj, path) {
