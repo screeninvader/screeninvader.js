@@ -13,9 +13,30 @@ Player.prototype = {
   forward:  function() { this.api.command('playerForward'); },
   rewind:   function() { this.api.command('playerRewind'); },
   jump:     function(id) {
-    this.api.command('playerJump', parseInt(id) + 1);
+    this.api.command('playerJump',
+                     (parseInt(id) + 1).toString());
   },
 };
+
+var Playlist = function(api) {
+  this.api = api;
+};
+
+Playlist.prototype = {
+  remove: function (id_) { this.api.command('playlistRemove',
+                                            (parseInt(id_) + 1).toString());
+  },
+  clear: function () { this.api.command('playlistClear'); },
+  shift: function (from, to) {
+    this.api.command('playlistShift', {
+      from: from.toString(),
+      to: to.toString()
+    });
+  },
+  load: function (urls) {
+    this.api.command('playlistLoad', urls);
+  },
+}
 
 var Browser = function(api) {
   this.api = api;
@@ -94,7 +115,7 @@ API.prototype = {
                                 this.getByPath(this.state, path.slice(0)) +
                                 ' to ' + update[2]);
                   this.setByPath(this.state, path.slice(0), update[2]);
-                } else if(update[1] == "D") { 
+                } else if(update[1] == "D") {
                   this.deleteByPath(this.state, path.slice(0));
                 }
             } else {
@@ -118,7 +139,7 @@ API.prototype = {
       if(obj[key] === undefined) {
         if(path.length >= 1 && path[0] == ".") {
           if(value.charAt(0) == 'A') {
-            //create an array 
+            //create an array
             obj[key] = []
             return null;
           } else {
@@ -130,25 +151,24 @@ API.prototype = {
           obj[key] = "";
         }
       }
-      console.debug(obj)
       return this.setByPath(obj[key], path, value);
     } else {
-      key = path.shift()
+      key = path.shift();
       if(key == ".") {
-         return null;
+        return null;
       }
       obj[key] = value;
     }
-  },
+    },
   deleteByPath: function (obj, path) {
     if (path.length > 1) {
       key = path.shift()
-      if(key.charAt(0) == '#') {
-        key = parseInt(key.substring(1));
-      } else if(path[0] == ".") {
-        delete obj[key];
-        return null;
-      }
+        if(key.charAt(0) == '#') {
+          key = parseInt(key.substring(1));
+        } else if(path[0] == ".") {
+          delete obj[key];
+          return null;
+        }
 
       return this.deleteByPath(obj[key], path);
     } else {
@@ -189,7 +209,7 @@ API.prototype = {
         this.send('trigger', key, value);
     },
     command: function(command, param) {
-        param = typeof(param) === 'undefined' ? '' : param.toString();
+        param = typeof(param) === 'undefined' ? '' : param;
         console.debug('executing '+command+'('+param+')');
         this.send('publish', command, 'W', param);
     },
