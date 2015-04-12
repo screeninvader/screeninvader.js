@@ -12,8 +12,7 @@ Player.prototype = {
   forward:  function() { this.api.command('playerForward'); },
   rewind:   function() { this.api.command('playerRewind'); },
   jump:     function(id) {
-    this.api.command('playerJump',
-                     (parseInt(id) + 1).toString());
+    this.api.command('playerJump', id.toString());
   },
 };
 
@@ -22,8 +21,8 @@ var Playlist = function(api) {
 };
 
 Playlist.prototype = {
-  remove: function (id_) { this.api.command('playlistRemove',
-                                            (parseInt(id_) + 1).toString());
+  remove: function (id) {
+    this.api.command('playlistRemove', id.toString());
   },
   clear: function () { this.api.command('playlistClear'); },
   shift: function (from, to) {
@@ -36,7 +35,7 @@ Playlist.prototype = {
     this.api.command('playlistLoad', urls);
   },
   seek:     function(seconds) {
-    this.api.command('playerSeek', parseInt(seconds));
+    this.api.command('playerSeek', seconds.toStrings());
   },
 };
 
