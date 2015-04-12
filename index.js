@@ -1,4 +1,3 @@
-
 var Player = function(api) {
   this.api = api;
 };
@@ -36,7 +35,7 @@ Playlist.prototype = {
   load: function (urls) {
     this.api.command('playlistLoad', urls);
   },
-}
+};
 
 var Browser = function(api) {
   this.api = api;
@@ -93,41 +92,41 @@ var API = function(uri) {
 };
 
 API.prototype = {
-    onReceive: function(fn) {
-        this.onReceiveCallback = fn;
-    },
-    onMessage: function(ev) {
-        var update = JSON.parse(ev.data);
-        if (!Array.isArray(update)) {
-            // initial full sync.
-            this.state = update;
-            this.state.events = {};
-        } else {
-            if (!this.state) { return; }
+  onReceive: function(fn) {
+    this.onReceiveCallback = fn;
+  },
+  onMessage: function(ev) {
+    var update = JSON.parse(ev.data);
+    if (!Array.isArray(update)) {
+      // initial full sync.
+      this.state = update;
+      this.state.events = {};
+    } else {
+      if (!this.state) { return; }
 
-            if (update[0].startsWith('/')) {
-                // update has the format key, operation, value here.
-                var path = update[0].split('/');
-                path.shift();
-                console.log(path);
-                if(update[1] == "W") {
-                  console.debug('changing ' + update[0] + ' from ' +
-                                this.getByPath(this.state, path.slice(0)) +
-                                ' to ' + update[2]);
-                  this.setByPath(this.state, path.slice(0), update[2]);
-                } else if(update[1] == "D") {
-                  this.deleteByPath(this.state, path.slice(0));
-                }
-            } else {
-                // update has the following format: event, operation, value
-                this.state.events[update[0]] = update[2];
-            }
+      if (update[0].startsWith('/')) {
+        // update has the format key, operation, value here.
+        var path = update[0].split('/');
+        path.shift();
+        console.log(path);
+        if(update[1] == "W") {
+          console.debug('changing ' + update[0] + ' from ' +
+                        this.getByPath(this.state, path.slice(0)) +
+                        ' to ' + update[2]);
+          this.setByPath(this.state, path.slice(0), update[2]);
+        } else if(update[1] == "D") {
+          this.deleteByPath(this.state, path.slice(0));
         }
-        this.onReceiveCallback(this.state);
-    },
-    setByPath: function (obj, path, value) {
+      } else {
+        // update has the following format: event, operation, value
+        this.state.events[update[0]] = update[2];
+      }
+    }
+    this.onReceiveCallback(this.state);
+  },
+  setByPath: function (obj, path, value) {
     if (path.length > 1) {
-      key = path.shift()
+      key = path.shift();
       if(key.charAt(0) == '#') {
         //encountered an array element
         key = parseInt(key.substring(1));
@@ -140,11 +139,11 @@ API.prototype = {
         if(path.length >= 1 && path[0] == ".") {
           if(value.charAt(0) == 'A') {
             //create an array
-            obj[key] = []
+            obj[key] = [];
             return null;
           } else {
             //create an object
-            obj[key] = {}
+            obj[key] = {};
             return null;
           }
         } else {
@@ -159,10 +158,10 @@ API.prototype = {
       }
       obj[key] = value;
     }
-    },
+  },
   deleteByPath: function (obj, path) {
     if (path.length > 1) {
-      key = path.shift()
+      key = path.shift();
         if(key.charAt(0) == '#') {
           key = parseInt(key.substring(1));
         } else if(path[0] == ".") {
@@ -172,49 +171,49 @@ API.prototype = {
 
       return this.deleteByPath(obj[key], path);
     } else {
-      key = path.shift()
-      if(key == ".") {
-         return null;
-      }
+      key = path.shift();
+        if(key == ".") {
+          return null;
+        }
       delete obj[key];
     }
   },
   getByPath: function(obj, path) {
     if (path.length > 0) {
-      key = path.shift()
-      if(key == ".") {
-       return null;
-      } else if (obj === undefined) {
-        return null;
-      }
+      key = path.shift();
+        if(key == ".") {
+          return null;
+        } else if (obj === undefined) {
+          return null;
+        }
       return this.getByPath(obj[key], path);
     } else {
       return obj;
     }
   },
   onError: function(fn) {
-        this.socket.onerror = fn;
-    },
-    onOpen: function(ev) {
-        this.socket.send('setup');
-    },
-    send: function(command, key, value) {
-        this.socket.send(
-            JSON.stringify(
-                Array.prototype.slice.call(
-                    arguments)));
-    },
-    set: function (key, value) {
-        console.debug('setting', key, 'to', value);
-        this.send('trigger', key, value);
-    },
-    command: function(command, param) {
-        param = typeof(param) === 'undefined' ? '' : param;
-        console.debug('executing '+command+'('+param+')');
-        this.send('publish', command, 'W', param);
-    },
-    showUrl: function(url) { this.command('showUrl', url); },
-    setVolume: function(volume) { this.set('/sound/volume', volume); },
+    this.socket.onerror = fn;
+  },
+  onOpen: function(ev) {
+    this.socket.send('setup');
+  },
+  send: function(command, key, value) {
+    this.socket.send(
+      JSON.stringify(
+        Array.prototype.slice.call(
+          arguments)));
+  },
+  set: function (key, value) {
+    console.debug('setting', key, 'to', value);
+    this.send('trigger', key, value);
+  },
+  command: function(command, param) {
+    param = typeof(param) === 'undefined' ? '' : param;
+    console.debug('executing '+command+'('+param+')');
+    this.send('publish', command, 'W', param);
+  },
+  showUrl: function(url) { this.command('showUrl', url); },
+  setVolume: function(volume) { this.set('/sound/volume', volume); },
 };
 
 module.exports = API;
