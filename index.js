@@ -90,6 +90,7 @@ var API = function(uri) {
   this.socket.onopen = this.onOpen.bind(this);
 
   this.player = new Player(this);
+  this.playlist = new Playlist(this);
   this.browser = new Browser(this);
   this.pdf = new Pdf(this);
   this.notify = new Notify(this);
