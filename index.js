@@ -35,6 +35,9 @@ Playlist.prototype = {
   load: function (urls) {
     this.api.command('playlistLoad', urls);
   },
+  seek:     function(seconds) {
+    this.api.command('playerSeek', parseInt(seconds));
+  },
 };
 
 var Browser = function(api) {
@@ -85,10 +88,13 @@ var API = function(uri) {
   this.socket.onmessage = this.onMessage.bind(this);
   this.socket.onerror = this.onError.bind(this);
   this.socket.onopen = this.onOpen.bind(this);
+
   this.player = new Player(this);
   this.browser = new Browser(this);
   this.pdf = new Pdf(this);
   this.notify = new Notify(this);
+
+  this.eventHandlers = {};
 };
 
 API.prototype = {
@@ -119,7 +125,16 @@ API.prototype = {
         }
       } else {
         // update has the following format: event, operation, value
-        this.state.events[update[0]] = update[2];
+        var eventName = update[0],
+            params = update[2];
+        var handlers = this.eventHandlers[eventName];
+
+        if (Array.isArray(handlers)) {
+          handlers.forEach(function(handler) {
+            handler(params);
+          });
+        }
+        return;
       }
     }
     this.onReceiveCallback(this.state);
@@ -187,9 +202,11 @@ API.prototype = {
           return null;
         }
       return this.getByPath(obj[key], path);
-    } else {
-      return obj;
     }
+  },
+  subscribe: function(eventName, fn) {
+    this.eventHandlers[eventName] = this.eventHandlers[eventName] || [];
+    this.eventHandlers[eventName].push(fn);
   },
   onError: function(fn) {
     this.socket.onerror = fn;
