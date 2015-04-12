@@ -14,6 +14,9 @@ Player.prototype = {
   jump:     function(id) {
     this.api.command('playerJump', parseInt(id) + 1);
   },
+  seek:     function(seconds) {
+    this.api.command('playerSeek', parseInt(seconds));
+  },
 };
 
 var Browser = function(api) {
