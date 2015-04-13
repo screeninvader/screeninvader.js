@@ -146,7 +146,7 @@
           return;
         }
       }
-      if (tyepof(this.onReceiveCallback) !== 'undefined') {
+      if (typeof(this.onReceiveCallback) !== 'undefined') {
         this.onReceiveCallback(this.state);
       }
     },
