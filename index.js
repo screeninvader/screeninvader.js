@@ -93,7 +93,7 @@
   };
 
   var API = function(uri) {
-    this.socket = new WebSocket(uri);
+    this.socket = new ReconnectingWebSocket(uri);
     this.socket.onmessage = this.onMessage.bind(this);
     this.socket.onerror = this.onError.bind(this);
     this.socket.onopen = this.onOpen.bind(this);

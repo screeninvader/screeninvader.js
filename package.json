@@ -8,5 +8,8 @@
     "repository": {
         "type": "git",
         "url": "git://github.com/screeninvader/screeninvader.js.git"
+    },
+    "dependencies": {
+        "reconnecting-websocket": "joewalnes/reconnecting-websocket"
     }
 }
