@@ -38,10 +38,10 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
     },
     clear: function () { this.api.command('playlistClear'); },
     shift: function (from, to) {
-      this.api.command('playlistShift', {
+      this.api.command('playlistShift', JSON.stringify({
         from: from.toString(),
         to: to.toString()
-      });
+     }));
     },
     load: function (urls) {
       this.api.command('playlistLoad', urls);
