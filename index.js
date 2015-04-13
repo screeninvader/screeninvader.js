@@ -138,7 +138,6 @@
           var eventName = update[0],
               params = update[2];
           var handlers = this.eventHandlers[eventName];
-          console.log(eventName);
           if (Array.isArray(handlers)) {
             handlers.forEach(function(handler) {
               handler(params);
@@ -147,7 +146,9 @@
           return;
         }
       }
-      this.onReceiveCallback(this.state);
+      if (tyepof(this.onReceiveCallback) !== 'undefined') {
+        this.onReceiveCallback(this.state);
+      }
     },
     setByPath: function (obj, path, value) {
       if (path.length > 1) {
