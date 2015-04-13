@@ -1,3 +1,5 @@
+var ReconnectingWebSocket = require("ReconnectingWebSocket");
+
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
