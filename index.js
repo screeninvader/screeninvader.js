@@ -1,182 +1,192 @@
-var Player = function(api) {
-  this.api = api;
-};
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define([], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory();
+  } else {
+    root.returnExports = factory();
+  }
+}(this, function () {
 
-Player.prototype = {
-  pause:    function() { this.api.command('playerPause'); },
-  // pause a second time un-pauses/plays.
-  play:     function() { this.api.command('playerPause'); },
-  stop:     function() { this.api.command('playerStop'); },
-  next:     function() { this.api.command('playerNext'); },
-  previous: function() { this.api.command('playerPrevious'); },
-  forward:  function() { this.api.command('playerForward'); },
-  rewind:   function() { this.api.command('playerRewind'); },
-  jump:     function(id) {
-    this.api.command('playerJump', id.toString());
-  },
-};
+  var Player = function(api) {
+    this.api = api;
+  };
 
-var Playlist = function(api) {
-  this.api = api;
-};
+  Player.prototype = {
+    pause:    function() { this.api.command('playerPause'); },
+    // pause a second time un-pauses/plays.
+    play:     function() { this.api.command('playerPause'); },
+    stop:     function() { this.api.command('playerStop'); },
+    next:     function() { this.api.command('playerNext'); },
+    previous: function() { this.api.command('playerPrevious'); },
+    forward:  function() { this.api.command('playerForward'); },
+    rewind:   function() { this.api.command('playerRewind'); },
+    jump:     function(id) {
+      this.api.command('playerJump', id.toString());
+    },
+  };
 
-Playlist.prototype = {
-  remove: function (id) {
-    this.api.command('playlistRemove', id.toString());
-  },
-  clear: function () { this.api.command('playlistClear'); },
-  shift: function (from, to) {
-    this.api.command('playlistShift', {
-      from: from.toString(),
-      to: to.toString()
-    });
-  },
-  load: function (urls) {
-    this.api.command('playlistLoad', urls);
-  },
-  seek:     function(seconds) {
-    this.api.command('playerSeek', seconds.toStrings());
-  },
-};
+  var Playlist = function(api) {
+    this.api = api;
+  };
 
-var Browser = function(api) {
-  this.api = api;
-};
+  Playlist.prototype = {
+    remove: function (id) {
+      this.api.command('playlistRemove', id.toString());
+    },
+    clear: function () { this.api.command('playlistClear'); },
+    shift: function (from, to) {
+      this.api.command('playlistShift', {
+        from: from.toString(),
+        to: to.toString()
+      });
+    },
+    load: function (urls) {
+      this.api.command('playlistLoad', urls);
+    },
+    seek:     function(seconds) {
+      this.api.command('playerSeek', seconds.toStrings());
+    },
+  };
 
-Browser.prototype = {
-  showUrl:     function() { this.api.command('/browser/url'); },
-  pageUp:      function() { this.api.command('browserPageUp'); },
-  pageDown:    function() { this.api.command('browserPageDown'); },
-  scrollUp:    function() { this.api.command('browserScrollUp'); },
-  scrollDown:  function() { this.api.command('browserScrollDown'); },
-  scrollLeft:  function() { this.api.command('browserScrollLeft'); },
-  scrollRight: function() { this.api.command('browserScrollRight'); },
-  zoomIn:      function() { this.api.command('browserZoomIn'); },
-  zoomOut:     function() { this.api.command('browserZoomOut'); },
-  close:       function() { this.api.command('browserClose'); },
-};
+  var Browser = function(api) {
+    this.api = api;
+  };
 
-var Pdf = function(api) {
-  this.api = api;
-};
+  Browser.prototype = {
+    showUrl:     function() { this.api.command('/browser/url'); },
+    pageUp:      function() { this.api.command('browserPageUp'); },
+    pageDown:    function() { this.api.command('browserPageDown'); },
+    scrollUp:    function() { this.api.command('browserScrollUp'); },
+    scrollDown:  function() { this.api.command('browserScrollDown'); },
+    scrollLeft:  function() { this.api.command('browserScrollLeft'); },
+    scrollRight: function() { this.api.command('browserScrollRight'); },
+    zoomIn:      function() { this.api.command('browserZoomIn'); },
+    zoomOut:     function() { this.api.command('browserZoomOut'); },
+    close:       function() { this.api.command('browserClose'); },
+  };
 
-Pdf.prototype = {
-  showUrl:     function() { this.api.command('/pdf/url'); },
-  active:      function() { this.api.command('/pdf/active'); },
-  pageUp:      function() { this.api.command('pdfPageUp'); },
-  pageDown:    function() { this.api.command('pdfPageDown'); },
-  scrollUp:    function() { this.api.command('pdfScrollUp'); },
-  scrollDown:  function() { this.api.command('pdfScrollDown'); },
-  scrollLeft:  function() { this.api.command('pdfScrollLeft'); },
-  scrollRight: function() { this.api.command('pdfScrollRight'); },
-  zoomIn:      function() { this.api.command('pdfZoomIn'); },
-  zoomOut:     function() { this.api.command('pdfZoomOut'); },
-};
+  var Pdf = function(api) {
+    this.api = api;
+  };
 
-var Notify = function(api) {
-  this.api = api;
-};
+  Pdf.prototype = {
+    showUrl:     function() { this.api.command('/pdf/url'); },
+    active:      function() { this.api.command('/pdf/active'); },
+    pageUp:      function() { this.api.command('pdfPageUp'); },
+    pageDown:    function() { this.api.command('pdfPageDown'); },
+    scrollUp:    function() { this.api.command('pdfScrollUp'); },
+    scrollDown:  function() { this.api.command('pdfScrollDown'); },
+    scrollLeft:  function() { this.api.command('pdfScrollLeft'); },
+    scrollRight: function() { this.api.command('pdfScrollRight'); },
+    zoomIn:      function() { this.api.command('pdfZoomIn'); },
+    zoomOut:     function() { this.api.command('pdfZoomOut'); },
+  };
 
-Notify.prototype = {
-  info:        function(text) { this.api.command('notifySend', text); },
-  exception:   function(text) { this.api.command('notifyException', text); },
-};
+  var Notify = function(api) {
+    this.api = api;
+  };
 
-var API = function(uri) {
-  this.socket = new WebSocket(uri);
-  this.socket.onmessage = this.onMessage.bind(this);
-  this.socket.onerror = this.onError.bind(this);
-  this.socket.onopen = this.onOpen.bind(this);
+  Notify.prototype = {
+    info:        function(text) { this.api.command('notifySend', text); },
+    exception:   function(text) { this.api.command('notifyException', text); },
+  };
 
-  this.player = new Player(this);
-  this.playlist = new Playlist(this);
-  this.browser = new Browser(this);
-  this.pdf = new Pdf(this);
-  this.notify = new Notify(this);
+  var API = function(uri) {
+    this.socket = new WebSocket(uri);
+    this.socket.onmessage = this.onMessage.bind(this);
+    this.socket.onerror = this.onError.bind(this);
+    this.socket.onopen = this.onOpen.bind(this);
 
-  this.eventHandlers = {};
-};
+    this.player = new Player(this);
+    this.playlist = new Playlist(this);
+    this.browser = new Browser(this);
+    this.pdf = new Pdf(this);
+    this.notify = new Notify(this);
 
-API.prototype = {
-  onReceive: function(fn) {
-    this.onReceiveCallback = fn;
-  },
-  onMessage: function(ev) {
-    var update = JSON.parse(ev.data);
-    if (!Array.isArray(update)) {
-      // initial full sync.
-      this.state = update;
-      this.state.events = {};
-    } else {
-      if (!this.state) { return; }
+    this.eventHandlers = {};
+  };
 
-      if (update[0].startsWith('/')) {
-        // update has the format key, operation, value here.
-        var path = update[0].split('/');
-        path.shift();
-        console.log(path);
-        if(update[1] == "W") {
-          console.debug('changing ' + update[0] + ' from ' +
-                        this.getByPath(this.state, path.slice(0)) +
-                        ' to ' + update[2]);
-          this.setByPath(this.state, path.slice(0), update[2]);
-        } else if(update[1] == "D") {
-          this.deleteByPath(this.state, path.slice(0));
-        }
+  API.prototype = {
+    onReceive: function(fn) {
+      this.onReceiveCallback = fn;
+    },
+    onMessage: function(ev) {
+      var update = JSON.parse(ev.data);
+      if (!Array.isArray(update)) {
+        // initial full sync.
+        this.state = update;
+        this.state.events = {};
       } else {
-        // update has the following format: event, operation, value
-        var eventName = update[0],
-            params = update[2];
-        var handlers = this.eventHandlers[eventName];
+        if (!this.state) { return; }
 
-        if (Array.isArray(handlers)) {
-          handlers.forEach(function(handler) {
-            handler(params);
-          });
-        }
-        return;
-      }
-    }
-    this.onReceiveCallback(this.state);
-  },
-  setByPath: function (obj, path, value) {
-    if (path.length > 1) {
-      key = path.shift();
-      if(key.charAt(0) == '#') {
-        //encountered an array element
-        key = parseInt(key.substring(1));
-      } else if(key == ".") {
-        //encountered a directory element -> ignore
-        return null;
-      }
-
-      if(obj[key] === undefined) {
-        if(path.length >= 1 && path[0] == ".") {
-          if(value.charAt(0) == 'A') {
-            //create an array
-            obj[key] = [];
-            return null;
-          } else {
-            //create an object
-            obj[key] = {};
-            return null;
+        if (update[0].startsWith('/')) {
+          // update has the format key, operation, value here.
+          var path = update[0].split('/');
+          path.shift();
+          console.log(path);
+          if(update[1] == "W") {
+            console.debug('changing ' + update[0] + ' from ' +
+                          this.getByPath(this.state, path.slice(0)) +
+                          ' to ' + update[2]);
+            this.setByPath(this.state, path.slice(0), update[2]);
+          } else if(update[1] == "D") {
+            this.deleteByPath(this.state, path.slice(0));
           }
         } else {
-          obj[key] = "";
+          // update has the following format: event, operation, value
+          var eventName = update[0],
+              params = update[2];
+          var handlers = this.eventHandlers[eventName];
+          console.log(eventName);
+          if (Array.isArray(handlers)) {
+            handlers.forEach(function(handler) {
+              handler(params);
+            });
+          }
+          return;
         }
       }
-      return this.setByPath(obj[key], path, value);
-    } else {
-      key = path.shift();
-      if(key == ".") {
-        return null;
+      this.onReceiveCallback(this.state);
+    },
+    setByPath: function (obj, path, value) {
+      if (path.length > 1) {
+        key = path.shift();
+        if(key.charAt(0) == '#') {
+          //encountered an array element
+          key = parseInt(key.substring(1));
+        } else if(key == ".") {
+          //encountered a directory element -> ignore
+          return null;
+        }
+
+        if(obj[key] === undefined) {
+          if(path.length >= 1 && path[0] == ".") {
+            if(value.charAt(0) == 'A') {
+              //create an array
+              obj[key] = [];
+              return null;
+            } else {
+              //create an object
+              obj[key] = {};
+              return null;
+            }
+          } else {
+            obj[key] = "";
+          }
+        }
+        return this.setByPath(obj[key], path, value);
+      } else {
+        key = path.shift();
+        if(key == ".") {
+          return null;
+        }
+        obj[key] = value;
       }
-      obj[key] = value;
-    }
-  },
-  deleteByPath: function (obj, path) {
-    if (path.length > 1) {
-      key = path.shift();
+    },
+    deleteByPath: function (obj, path) {
+      if (path.length > 1) {
+        key = path.shift();
         if(key.charAt(0) == '#') {
           key = parseInt(key.substring(1));
         } else if(path[0] == ".") {
@@ -184,53 +194,54 @@ API.prototype = {
           return null;
         }
 
-      return this.deleteByPath(obj[key], path);
-    } else {
-      key = path.shift();
+        return this.deleteByPath(obj[key], path);
+      } else {
+        key = path.shift();
         if(key == ".") {
           return null;
         }
-      delete obj[key];
-    }
-  },
-  getByPath: function(obj, path) {
-    if (path.length > 0) {
-      key = path.shift();
+        delete obj[key];
+      }
+    },
+    getByPath: function(obj, path) {
+      if (path.length > 0) {
+        key = path.shift();
         if(key == ".") {
           return null;
         } else if (obj === undefined) {
           return null;
         }
-      return this.getByPath(obj[key], path);
-    }
-  },
-  subscribe: function(eventName, fn) {
-    this.eventHandlers[eventName] = this.eventHandlers[eventName] || [];
-    this.eventHandlers[eventName].push(fn);
-  },
-  onError: function(fn) {
-    this.socket.onerror = fn;
-  },
-  onOpen: function(ev) {
-    this.socket.send('setup');
-  },
-  send: function(command, key, value) {
-    this.socket.send(
-      JSON.stringify(
-        Array.prototype.slice.call(
-          arguments)));
-  },
-  set: function (key, value) {
-    console.debug('setting', key, 'to', value);
-    this.send('trigger', key, value);
-  },
-  command: function(command, param) {
-    param = typeof(param) === 'undefined' ? '' : param;
-    console.debug('executing '+command+'('+param+')');
-    this.send('publish', command, 'W', param);
-  },
-  showUrl: function(url) { this.command('showUrl', url); },
-  setVolume: function(volume) { this.set('/sound/volume', volume); },
-};
+        return this.getByPath(obj[key], path);
+      }
+    },
+    subscribe: function(eventName, fn) {
+      this.eventHandlers[eventName] = this.eventHandlers[eventName] || [];
+      this.eventHandlers[eventName].push(fn);
+    },
+    onError: function(fn) {
+      this.socket.onerror = fn;
+    },
+    onOpen: function(ev) {
+      this.socket.send('setup');
+    },
+    send: function(command, key, value) {
+      this.socket.send(
+        JSON.stringify(
+          Array.prototype.slice.call(
+            arguments)));
+    },
+    set: function (key, value) {
+      console.debug('setting', key, 'to', value);
+      this.send('trigger', key, value);
+    },
+    command: function(command, param) {
+      param = typeof(param) === 'undefined' ? '' : param;
+      console.debug('executing '+command+'('+param+')');
+      this.send('publish', command, 'W', param);
+    },
+    showUrl: function(url) { this.command('showUrl', url); },
+    setVolume: function(volume) { this.set('/sound/volume', volume); },
+  };
 
-module.exports = API;
+  return API;
+}));
