@@ -190,17 +190,20 @@
         key = path.shift();
         if(key.charAt(0) == '#') {
           key = parseInt(key.substring(1));
-        } else if(path[0] == ".") {
-          delete obj[key];
+        } 
+
+        if(path[0] == ".") {
+          if(Array.isArray(obj))
+            obj.splice(key, 1);
+          else
+            delete obj[key];
+
           return null;
         }
 
         return this.deleteByPath(obj[key], path);
       } else {
         key = path.shift();
-        if(key == ".") {
-          return null;
-        }
         delete obj[key];
       }
     },
