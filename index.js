@@ -195,8 +195,12 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
         } 
 
         if(path[0] == ".") {
-          if(Array.isArray(obj))
-            obj.splice(key, 1);
+          if(Array.isArray(obj)) {
+            if(obj.length < 2)
+              obj = [];
+            else
+              obj.splice(key, 1);
+          }
           else
             delete obj[key];
 
