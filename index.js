@@ -94,9 +94,27 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
     exception:   function(text) { this.api.command('notifyException', text); },
   };
 
+  var Mousebutton = function(api, buttonId) {
+    this.api = api;
+    this.buttonId = buttonId;
+  };
+
+  Mousebutton.prototype = {
+    up:   function() { this.api.mouse.up(this.buttonId); },
+    down: function() { this.api.mouse.down(this.buttonId); },
+  };
+
   var Mouse = function(api) {
     this.api = api;
-  }
+    
+    this.buttons = {
+      left:      new Mousebutton(this.api, '1'),
+      middle:    new Mousebutton(this.api, '2'),
+      right:     new Mousebutton(this.api, '3'),
+      wheelUp:   new Mousebutton(this.api, '4'),
+      wheelDown: new Mousebutton(this.api, '5'),
+    };
+  };
   
   Mouse.prototype = {
     moveAbs: function(x, y) { this.api.command('mouseMoveAbs', JSON.stringify([ x, y ])); },
@@ -107,7 +125,7 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
 
   var Keyboard = function(api) {
     this.api = api;
-  }
+  };
 
   Keyboard.prototype = {
     keyType: function(key) { this.api.command('keyType', key); },
