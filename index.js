@@ -26,6 +26,9 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
     jump:     function(id) {
       this.api.command('playerJump', id.toString());
     },
+    seek:     function(seconds) {
+      this.api.command('playerSeek', seconds.toStrings());
+    },
   };
 
   var Playlist = function(api) {
@@ -45,9 +48,6 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
     },
     load: function (urls) {
       this.api.command('playlistLoad', urls);
-    },
-    seek:     function(seconds) {
-      this.api.command('playerSeek', seconds.toStrings());
     },
   };
 
