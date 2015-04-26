@@ -155,7 +155,7 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
     this.notify = new Notify(this);
     this.mouse = new Mouse(this);
     this.keyboard = new Keyboard(this);
-
+    this.shairport = new Shairport(this);
     this.eventHandlers = {};
   };
 
