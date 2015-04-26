@@ -94,6 +94,15 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
     exception:   function(text) { this.api.command('notifyException', text); },
   };
 
+  var Shairport = function(api) {
+    this.api = api;
+  };
+
+  Shairport.prototype = {
+    start:        function() { this.api.command('shairportStart'); },
+    stop:   function() { this.api.command('shairportStop'); },
+  };
+
   var API = function(uri) {
     this.socket = new ReconnectingWebSocket(uri);
     this.socket.onmessage = this.onMessage.bind(this);
