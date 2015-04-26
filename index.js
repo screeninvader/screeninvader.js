@@ -26,6 +26,9 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
     jump:     function(id) {
       this.api.command('playerJump', id.toString());
     },
+    seek:     function(seconds) {
+      this.api.command('playerSeek', seconds.toStrings());
+    },
   };
 
   var Playlist = function(api) {
@@ -45,9 +48,6 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
     },
     load: function (urls) {
       this.api.command('playlistLoad', urls);
-    },
-    seek:     function(seconds) {
-      this.api.command('playerSeek', seconds.toStrings());
     },
   };
 
@@ -103,6 +103,45 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
     stop:   function() { this.api.command('shairportStop'); },
   };
 
+  var Mousebutton = function(api, buttonId) {
+    this.api = api;
+    this.buttonId = buttonId;
+  };
+
+  Mousebutton.prototype = {
+    up:   function() { this.api.mouse.up(this.buttonId); },
+    down: function() { this.api.mouse.down(this.buttonId); },
+  };
+
+  var Mouse = function(api) {
+    this.api = api;
+    
+    this.buttons = {
+      left:      new Mousebutton(this.api, '1'),
+      middle:    new Mousebutton(this.api, '2'),
+      right:     new Mousebutton(this.api, '3'),
+      wheelUp:   new Mousebutton(this.api, '4'),
+      wheelDown: new Mousebutton(this.api, '5'),
+    };
+  };
+  
+  Mouse.prototype = {
+    moveAbs: function(x, y) { this.api.command('mouseMoveAbs', JSON.stringify([ x, y ])); },
+    moveRel: function(x, y) { this.api.command('mouseMoveRel', JSON.stringify([ x, y ])); },
+    up:      function(button) { this.api.command('mouseUp', button); },
+    down:    function(button) { this.api.command('mouseDown', button); },
+  };
+
+  var Keyboard = function(api) {
+    this.api = api;
+  };
+
+  Keyboard.prototype = {
+    keyType: function(key) { this.api.command('keyType', key); },
+    keyUp:   function(key) { this.api.command('keyUp', key); },
+    keyDown: function(key) { this.api.command('keyDown', key); },
+  };
+  
   var API = function(uri) {
     this.socket = new ReconnectingWebSocket(uri);
     this.socket.onmessage = this.onMessage.bind(this);
@@ -114,6 +153,8 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
     this.browser = new Browser(this);
     this.pdf = new Pdf(this);
     this.notify = new Notify(this);
+    this.mouse = new Mouse(this);
+    this.keyboard = new Keyboard(this);
 
     this.eventHandlers = {};
   };
