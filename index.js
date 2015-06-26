@@ -102,6 +102,15 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
     stop:   function() { this.api.command('shairportStop'); },
   };
 
+  var Peerflix = function(api) {
+    this.api = api;
+  }
+
+  Peerflix.prototype = {
+    start:        function() { this.api.command('peerflixStart'); },
+    stop:   function() { this.api.command('peerflixStop'); },
+  };
+
   var Mousebutton = function(api, buttonId) {
     this.api = api;
     this.buttonId = buttonId;
@@ -155,6 +164,7 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
     this.mouse = new Mouse(this);
     this.keyboard = new Keyboard(this);
     this.shairport = new Shairport(this);
+    this.peerflix = new Peerflix(this);
     this.eventHandlers = {};
   };
 
