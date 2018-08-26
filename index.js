@@ -56,8 +56,6 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
 
   Browser.prototype = {
     showUrl:     function() { this.api.command('/browser/url'); },
-    pageUp:      function() { this.api.command('browserPageUp'); },
-    pageDown:    function() { this.api.command('browserPageDown'); },
     scrollUp:    function() { this.api.command('browserScrollUp'); },
     scrollDown:  function() { this.api.command('browserScrollDown'); },
     scrollLeft:  function() { this.api.command('browserScrollLeft'); },
