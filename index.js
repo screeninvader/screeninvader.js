@@ -26,7 +26,7 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
       this.api.command('playerJump', id.toString());
     },
     seek:     function(seconds) {
-      this.api.command('playerSeek', seconds.toStrings());
+      this.api.command('playerSeek', seconds.toString());
     },
   };
 
@@ -121,7 +121,7 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
 
   var Mouse = function(api) {
     this.api = api;
-    
+
     this.buttons = {
       left:      new Mousebutton(this.api, '1'),
       middle:    new Mousebutton(this.api, '2'),
@@ -130,7 +130,7 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
       wheelDown: new Mousebutton(this.api, '5'),
     };
   };
-  
+
   Mouse.prototype = {
     moveAbs: function(x, y) { this.api.command('mouseMoveAbs', JSON.stringify([ x, y ])); },
     moveRel: function(x, y) { this.api.command('mouseMoveRel', JSON.stringify([ x, y ])); },
@@ -147,7 +147,7 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
     keyUp:   function(key) { this.api.command('keyUp', key); },
     keyDown: function(key) { this.api.command('keyDown', key); },
   };
-  
+
   var API = function(uri) {
     this.socket = new ReconnectingWebSocket(uri);
     this.socket.onmessage = this.onMessage.bind(this);
@@ -249,7 +249,7 @@ var ReconnectingWebSocket = require("ReconnectingWebSocket");
         key = path.shift();
         if(key.charAt(0) == '#') {
           key = parseInt(key.substring(1));
-        } 
+        }
 
         if(path[0] == ".") {
           if(Array.isArray(obj)) {
