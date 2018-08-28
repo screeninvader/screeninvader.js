@@ -169,6 +169,12 @@ var JanoshAPI = require("janosh.js");
     setVolume: function(volume) { this.japi.set('/sound/volume', volume); },
     subscribe: function(eventName, fn) {
 			this.japi.subscribe(eventName, fn);
+    },
+    onError: function(fn) {
+      this.japi.onError(fn);
+    },
+	  onReceive: function(fn) {
+      this.japi.onReceive(fn);
     }
   };
 
