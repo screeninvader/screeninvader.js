@@ -152,15 +152,15 @@ var JanoshAPI = require("janosh.js");
   var API = function(uri) {
 	  this.japi = new JanoshAPI(uri);
 
-    this.player = new Player(japi);
-    this.playlist = new Playlist(japi);
-    this.browser = new Browser(japi);
-    this.pdf = new Pdf(japi);
-    this.notify = new Notify(japi);
-    this.mouse = new Mouse(japi);
-    this.keyboard = new Keyboard(japi);
-    this.shairport = new Shairport(japi);
-    this.peerflix = new Peerflix(japi);
+    this.player = new Player(this.japi);
+    this.playlist = new Playlist(this.japi);
+    this.browser = new Browser(this.japi);
+    this.pdf = new Pdf(this.japi);
+    this.notify = new Notify(this.japi);
+    this.mouse = new Mouse(this.japi);
+    this.keyboard = new Keyboard(this.japi);
+    this.shairport = new Shairport(this.japi);
+    this.peerflix = new Peerflix(this.japi);
     this.eventHandlers = {};
   };
 
