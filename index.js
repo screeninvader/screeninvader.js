@@ -150,7 +150,7 @@ var JanoshAPI = require("janosh.js");
   };
 
   var API = function(uri) {
-	  var japi = new API(uri);
+	  var japi = new JanoshAPI(uri);
 
     this.player = new Player(japi);
     this.playlist = new Playlist(japi);
