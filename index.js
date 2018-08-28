@@ -56,7 +56,6 @@ var JanoshAPI = require("janosh.js");
   };
 
   Browser.prototype = {
-    showUrl:     function() { this.japi.command('/browser/url'); },
     scrollUp:    function() { this.japi.command('browserScrollUp'); },
     scrollDown:  function() { this.japi.command('browserScrollDown'); },
     scrollLeft:  function() { this.japi.command('browserScrollLeft'); },
@@ -71,8 +70,6 @@ var JanoshAPI = require("janosh.js");
   };
 
   Pdf.prototype = {
-    showUrl:     function() { this.japi.command('/pdf/url'); },
-    active:      function() { this.japi.command('/pdf/active'); },
     pageUp:      function() { this.japi.command('pdfPageUp'); },
     pageDown:    function() { this.japi.command('pdfPageDown'); },
     scrollUp:    function() { this.japi.command('pdfScrollUp'); },
@@ -166,7 +163,6 @@ var JanoshAPI = require("janosh.js");
 
   API.prototype = {
     showUrl: function(url) { this.japi.command('showUrl', url); },
-    setVolume: function(volume) { this.japi.set('/sound/volume', volume); },
     subscribe: function(eventName, fn) {
 			this.japi.subscribe(eventName, fn);
     },
