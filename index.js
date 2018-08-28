@@ -163,6 +163,7 @@ var JanoshAPI = require("janosh.js");
 
   API.prototype = {
     showUrl: function(url) { this.japi.command('showUrl', url); },
+    setVolume: function(val) { this.japi.command('setVolume', val); },
     subscribe: function(eventName, fn) {
 			this.japi.subscribe(eventName, fn);
     },
