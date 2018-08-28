@@ -1,6 +1,5 @@
 var ReconnectingWebSocket = require("ReconnectingWebSocket");
-import JanoshAPI from 'janosh.js';
-import config from './config';
+var JanoshAPI = require("janosh.js");
 
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
