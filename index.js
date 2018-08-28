@@ -165,8 +165,11 @@ var JanoshAPI = require("janosh.js");
   };
 
   API.prototype = {
-    showUrl: function(url) { this.command('showUrl', url); },
-    setVolume: function(volume) { this.set('/sound/volume', volume); },
+    showUrl: function(url) { this.japi.command('showUrl', url); },
+    setVolume: function(volume) { this.japi.set('/sound/volume', volume); },
+    subscribe: function(eventName, fn) {
+			this.japi.subscribe(eventName, fn);
+    }
   };
 
   return API;
