@@ -10,7 +10,7 @@
         "url": "git://github.com/screeninvader/screeninvader.js.git"
     },
     "dependencies": {
-        "reconnecting-websocket": "joewalnes/reconnecting-websocket",
+        "reconnecting-websocket": "*",
         "janosh.js": "kallaballa/janosh.js"
     }
 }
