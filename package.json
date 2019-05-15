@@ -11,6 +11,6 @@
     },
     "dependencies": {
         "reconnecting-websocket": "joewalnes/reconnecting-websocket",
-		    "janosh.js": "kallaballa/janosh.js"
+        "janosh.js": "kallaballa/janosh.js"
     }
 }

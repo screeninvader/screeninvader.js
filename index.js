@@ -1,4 +1,4 @@
-var ReconnectingWebSocket = require("ReconnectingWebSocket");
+import ReconnectingWebSocket from 'reconnecting-websocket';
 var JanoshAPI = require("janosh.js");
 
 (function (root, factory) {
